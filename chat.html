@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="Asha From Shanghai">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>message</title>
+    <style type="text/css">
+        .contentContainer{
+            padding-bottom: 150px;
+        }
+        .contentContainer .me{
+            text-align: right;
+        }
+        .contentContainer .friend{
+            text-align: left;
+        }
+        .contentContainer .friend,.contentContainer .me{
+            position: relative;
+        }
+        .contentContainer .me .text{
+            width: 60%;
+            margin-right: 8px;
+            text-align: left;
+        }
+        .contentContainer .friend .text{
+            width: 60%;
+            margin-left: 8px;
+        }
+        .contentContainer .text{
+            background-color: #016355;
+            color: white;
+            padding: 14px;
+            font-size: 14px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .contentContainer .friend .text{
+            background-color: #f18d96;
+        }
+        .contentContainer .avatar{
+            width: 44px;
+            height: 44px;
+        }
+        .contentContainer .avatar img{
+            width: 100%;
+            border-radius: 50%;
+        }
+        .me,.friend{
+            margin-top: 16px;
+            display: flex;
+        }
+        .me .meSpace{
+            flex: 1;
+        }
+
+
+        .sendContainer{
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            left: 0;
+            z-index: 10;
+            background-color: #f3f0f0;
+            display: flex;
+        }
+        .sendContainer .sendButton{
+            background-color: #03A9F4;
+            color: white;
+            padding: 0 8px;
+            text-align: center;
+            font-size: 12px;
+            height: 28px;
+            line-height: 28px;
+            width: 9%;
+            margin-top: 8px;
+            margin-right: 4px;
+
+        }
+        .sendContainer .text{
+            border: 1px solid #9E9E9E;
+            margin: 4px;
+            width: 80%;
+            height: 28px;
+            padding-left: 8px;
+            font-size: 14px;
+        }
+        .sendContainer .text,.sendContainer .sendButton,.contentContainer .text,.contentContainer .avatar{
+            display: inline-block;
+        }
+
+        span.date{
+            font-size: 10px;
+            color: #6b6c6d;
+            position: absolute;
+            display: inline-block;
+            width: 120px;
+            left: 0;
+            top: -16px;
+        }
+
+        textarea:focus,textarea:active,textarea:hover,textarea:visited,textarea:active{
+            outline: none;
+        }
+        .contentContainer{
+            overflow: auto;
+            overscroll-behavior: contain;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatWindow" style="margin: 8px;position: relative;margin-top: 26px;" me="{{me}}" him="{{friend}}" chatId="{{chat_id}}">
+        <div class="contentContainer">
+            
+        </div>
+        <div class="sendContainer" id="targetInputContainer">
+            <textarea class="text"></textarea>
+            <div class="sendButton">发送</div>
+        </div>
+        <div style='display: hide' id='csrf' content='{{csrf_token}}'></div>
+    </div>
+    <script type="text/javascript">
+        function include(filename) {
+            let asha_mobile = document.querySelector('#chatWindow');
+            script = document.createElement('script');
+            script.src = filename;
+            script.type = 'text/javascript';
+            asha_mobile.appendChild(script);
+        }
+        //未利用的变量
+        let setSendMessageTimeoutStart = false;
+        let sendMessageTimeoutID = null;
+        let getNewMessageTimeoutId = null;
+        let newestMessageCount = 0;
+        let clearShowTheCountSetTimeoutId = null;
+        let newestMessageDate = null;
+        let countLine = [];
+        let roofMessageFromLocalDBCreatedAt = null;
+        //已经利用的变量
+        let enterKeyUp = true;
+        let meId = document.querySelector("#chatWindow").getAttribute("me").split("?")[1];
+        let himId = document.querySelector("#chatWindow").getAttribute("him").split("?")[1];
+        let chatId = document.querySelector("#chatWindow").getAttribute("chatId");
+        let db = null;
+        let alreadyToTop = false;
+        let idleTimeCount = 0;
+        const messageDBaddress = "https://xxxxxxxxxxx/Share/Private/Msg/receive/" + himId + "_" + chatId + "/";
+        const messageDBPostaddress = "https://xxxxxxxxxxx/Share/Private/Msg/send/";
+        include("/static/js/libv3/dexie.js");
+        include("/static/js/libv3/chat.js");
+        let body = document.body; //IE 'quirks'
+        let document_ = document.documentElement; //IE with doctype
+        /** dependency:https://unpkg.com/dexie@latest/dist/dexie.js */
+        window.onload = function(){
+            MainClass.start();
+        };
+    </script>
+</body>
+
+</html>
